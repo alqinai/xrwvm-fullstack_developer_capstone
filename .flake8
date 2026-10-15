@@ -1,0 +1,3 @@
+[flake8]
+# Existing course code has several lengthy Django declarations.
+max-line-length = 220
