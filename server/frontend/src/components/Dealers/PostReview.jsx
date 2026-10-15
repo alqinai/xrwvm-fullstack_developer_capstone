@@ -8,7 +8,7 @@ import Header from '../Header/Header';
 const PostReview = () => {
   const [dealer, setDealer] = useState({});
   const [review, setReview] = useState("");
-  const [model, setModel] = useState();
+  const [model, setModel] = useState("");
   const [year, setYear] = useState("");
   const [date, setDate] = useState("");
   const [carmodels, setCarmodels] = useState([]);
@@ -32,9 +32,8 @@ const PostReview = () => {
       return;
     }
 
-    let model_split = model.split(" ");
-    let make_chosen = model_split[0];
-    let model_chosen = model_split[1];
+    const selectedCar = carmodels[Number(model)];
+    if (!selectedCar) return;
 
     let jsoninput = JSON.stringify({
       "name": name,
@@ -42,8 +41,8 @@ const PostReview = () => {
       "review": review,
       "purchase": true,
       "purchase_date": date,
-      "car_make": make_chosen,
-      "car_model": model_chosen,
+      "car_make": selectedCar.CarMake,
+      "car_model": selectedCar.CarModel,
       "car_year": year,
     });
 
@@ -59,6 +58,8 @@ const PostReview = () => {
   const json = await res.json();
   if (json.status === 200) {
       window.location.href = window.location.origin+"/dealer/"+id;
+  } else {
+      alert(json.message || "Unable to post review. Please log in and try again.");
   }
 
   }
@@ -101,10 +102,10 @@ const PostReview = () => {
       </div>
       <div className='input_field'>
       Car Make 
-      <select name="cars" id="cars" onChange={(e) => setModel(e.target.value)}>
-      <option value="" selected disabled hidden>Choose Car Make and Model</option>
-      {carmodels.map(carmodel => (
-          <option value={carmodel.CarMake+" "+carmodel.CarModel}>{carmodel.CarMake} {carmodel.CarModel}</option>
+      <select name="cars" id="cars" value={model} onChange={(e) => setModel(e.target.value)}>
+      <option value="" disabled>Choose Car Make and Model</option>
+      {carmodels.map((carmodel, index) => (
+          <option key={index} value={index}>{carmodel.CarMake} {carmodel.CarModel}</option>
       ))}
       </select>        
       </div >
