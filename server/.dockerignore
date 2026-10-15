@@ -1,0 +1,10 @@
+djangoenv/
+**/__pycache__/
+**/*.pyc
+.git/
+node_modules/
+frontend/node_modules/
+frontend/src/
+frontend/public/
+database/
+*.log
