@@ -15,6 +15,8 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from .populate import initiate
 from .models import CarMake, CarModel
+from .restapis import get_request, analyze_review_sentiments, post_review
+import requests
 
 
 # Get an instance of a logger
@@ -93,3 +95,57 @@ def get_cars(request):
     cars = [{"CarModel": car_model.name, "CarMake": car_model.car_make.name}
             for car_model in car_models]
     return JsonResponse({"CarModels": cars})
+
+
+def get_dealerships(request, state="All"):
+    endpoint = "/fetchDealers" if state == "All" else "/fetchDealers/" + state
+    try:
+        dealerships = get_request(endpoint)
+        return JsonResponse({"status": 200, "dealers": dealerships})
+    except (requests.RequestException, ValueError) as error:
+        logger.error("Unable to fetch dealerships: %s", error)
+        return JsonResponse({"status": 502, "message": "Unable to fetch dealerships"}, status=502)
+
+
+def get_dealer_details(request, dealer_id):
+    try:
+        dealership = get_request("/fetchDealer/" + str(dealer_id))
+        return JsonResponse({"status": 200, "dealer": dealership})
+    except (requests.RequestException, ValueError) as error:
+        logger.error("Unable to fetch dealer: %s", error)
+        return JsonResponse({"status": 502, "message": "Unable to fetch dealer"}, status=502)
+
+
+def get_dealer_reviews(request, dealer_id):
+    try:
+        reviews = get_request("/fetchReviews/dealer/" + str(dealer_id))
+    except (requests.RequestException, ValueError) as error:
+        logger.error("Unable to fetch reviews: %s", error)
+        return JsonResponse({"status": 502, "message": "Unable to fetch reviews"}, status=502)
+    for review_detail in reviews:
+        try:
+            response = analyze_review_sentiments(review_detail.get("review", ""))
+            review_detail["sentiment"] = response["sentiment"]
+        except (requests.RequestException, ValueError, KeyError) as error:
+            logger.error("Unable to analyze review sentiment: %s", error)
+            return JsonResponse({"status": 502, "message": "Sentiment analyzer unavailable"}, status=502)
+    return JsonResponse({"status": 200, "reviews": reviews})
+
+
+@csrf_exempt
+def add_review(request):
+    if request.user.is_anonymous:
+        return JsonResponse({"status": 403, "message": "Unauthorized"}, status=403)
+    if request.method != "POST":
+        return JsonResponse({"status": 405, "message": "Method Not Allowed"}, status=405)
+    try:
+        data = json.loads(request.body)
+        if not isinstance(data, dict):
+            raise ValueError("Review data must be an object")
+        post_review(data)
+        return JsonResponse({"status": 200})
+    except (ValueError, TypeError):
+        return JsonResponse({"status": 400, "message": "Invalid review data"}, status=400)
+    except requests.RequestException as error:
+        logger.error("Error posting review: %s", error)
+        return JsonResponse({"status": 502, "message": "Error in posting review"}, status=502)
