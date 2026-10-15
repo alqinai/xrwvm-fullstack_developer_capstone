@@ -2,7 +2,7 @@
 
 # from django.shortcuts import render
 # from django.http import HttpResponseRedirect, HttpResponse
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 # from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
 # from django.contrib import messages
@@ -45,9 +45,27 @@ def logout_request(request):
     return JsonResponse(data)
 
 # Create a `registration` view to handle sign up request
-# @csrf_exempt
-# def registration(request):
-# ...
+@csrf_exempt
+def registration(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Method Not Allowed"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    username = data.get("userName", "").strip()
+    password = data.get("password", "")
+    first_name = data.get("firstName", "").strip()
+    last_name = data.get("lastName", "").strip()
+    email = data.get("email", "").strip()
+    if not username or not password:
+        return JsonResponse({"error": "Username and password are required"}, status=400)
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({"userName": username, "error": "Already Registered"})
+    user = User.objects.create_user(username=username, password=password,
+                                    first_name=first_name, last_name=last_name, email=email)
+    login(request, user)
+    return JsonResponse({"userName": username, "status": "Authenticated"})
 
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
