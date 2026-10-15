@@ -15,7 +15,8 @@ const Dealers = () => {
   let dealer_url_by_state = "/djangoapp/get_dealers/";
  
   const filterDealers = async (state) => {
-    dealer_url_by_state = dealer_url_by_state+state;
+    if (state === "All") { await get_dealers(); return; }
+    dealer_url_by_state = dealer_url_by_state+encodeURIComponent(state);
     const res = await fetch(dealer_url_by_state, {
       method: "GET"
     });
@@ -53,7 +54,7 @@ return(
       <Header/>
 
      <table className='table'>
-      <tr>
+      <thead><tr>
       <th>ID</th>
       <th>Dealer Name</th>
       <th>City</th>
@@ -61,10 +62,10 @@ return(
       <th>Zip</th>
       <th>
       <select name="state" id="state" onChange={(e) => filterDealers(e.target.value)}>
-      <option value="" selected disabled hidden>State</option>
+      <option value="" disabled hidden>State</option>
       <option value="All">All States</option>
       {states.map(state => (
-          <option value={state}>{state}</option>
+          <option key={state} value={state}>{state}</option>
       ))}
       </select>        
 
@@ -73,9 +74,9 @@ return(
           <th>Review Dealer</th>
          ):<></>
       }
-      </tr>
-     {dealersList.map(dealer => (
-        <tr>
+      </tr></thead>
+     <tbody>{dealersList.map(dealer => (
+        <tr key={dealer.id}>
           <td>{dealer['id']}</td>
           <td><a href={'/dealer/'+dealer['id']}>{dealer['full_name']}</a></td>
           <td>{dealer['city']}</td>
@@ -87,8 +88,8 @@ return(
            ):<></>
           }
         </tr>
-      ))}
-     </table>;
+      ))}</tbody>
+     </table>
   </div>
 )
 }
