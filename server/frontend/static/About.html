@@ -1,68 +1,56 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <!-- Link the style sheet here -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Best Cars</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <style>
+    body { background: #f5f7fa; }
+    .team-photo { width: 100%; height: 220px; object-fit: cover; }
+    .team-card { border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: white; }
+    .team-card .card-body { padding: 1.5rem; }
+  </style>
 </head>
-<div>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
-    <div class="container-fluid">
-      <h2 style="padding-right: 5%;">Dealerships</h2>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkturquoise;">
+    <div class="container-fluid py-3">
+      <a class="navbar-brand fw-bold" href="/">Best Cars Dealership</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" style="font-size: larger;" href="/about">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about/">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact/">Contact Us</a></li>
         </ul>
       </div>
     </div>
   </nav>
-  
-    <div class="card" style="width: 80%;margin: auto; margin-top:5%;">
-      <div class="banner" name="about-header">
-      <!-- Insert header information here -->
-      </div>
-      <div style="display: flex;flex-direction: row; margin:auto">
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person1</p>
-          <p>Person1 Title</p>
-          <p class="card-text">Some text that explains the person1 in about 2 short sentences</p>
-          <p>person1@example.com</p>
-        </div>
-      </div>
-
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person2</p>
-          <p>Person2 Title</p>
-          <p class="card-text">Some text that explains the person2 in about 2 short sentences</p>
-          <p>person2@example.com</p>
-        </div>
-      </div>
-
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person3</p>
-          <p>Person3 Title</p>
-          <p class="card-text">Some text that explains the person3 in about 2 short sentences</p>
-          <p>person3@example.com</p>
-        </div>
-      </div>
+  <main class="container py-5">
+    <div class="text-center mb-5" name="about-header">
+      <h1 class="display-5 fw-bold">About Us</h1>
+      <p class="lead mx-auto" style="max-width: 800px;">Welcome to Best Cars dealership, home to the best cars in North America. We deal in selling domestic and imported cars at reasonable prices.</p>
+      <p class="text-muted mx-auto" style="max-width: 760px;">Our goal is to make car shopping straightforward, transparent, and enjoyable. Explore options from trusted dealerships and compare vehicles to find the right fit.</p>
     </div>
+    <h2 class="h3 text-center mb-4">Meet Our Team</h2>
+    <div class="row g-4">
+      <div class="col-md-4"><div class="team-card h-100">
+        <img class="team-photo" src="https://i.pravatar.cc/500?img=12" alt="Portrait representing Alex Morgan, general manager">
+        <div class="card-body"><h3 class="h5">Alex Morgan</h3><p class="fw-semibold">General Manager</p><p>Alex guides our dealership partnerships and helps the team deliver a reliable car-buying experience.</p><p class="text-muted">management@bestcars.example</p></div>
+      </div></div>
+      <div class="col-md-4"><div class="team-card h-100">
+        <img class="team-photo" src="https://i.pravatar.cc/500?img=47" alt="Portrait representing Jordan Lee, sales advisor">
+        <div class="card-body"><h3 class="h5">Jordan Lee</h3><p class="fw-semibold">Sales Advisor</p><p>Jordan helps customers compare makes, models, and dealer offerings with clarity and confidence.</p><p class="text-muted">sales@bestcars.example</p></div>
+      </div></div>
+      <div class="col-md-4"><div class="team-card h-100">
+        <img class="team-photo" src="https://i.pravatar.cc/500?img=32" alt="Portrait representing Taylor Reed, customer experience lead">
+        <div class="card-body"><h3 class="h5">Taylor Reed</h3><p class="fw-semibold">Customer Experience Lead</p><p>Taylor supports customers throughout their search and ensures their feedback is heard.</p><p class="text-muted">support@bestcars.example</p></div>
+      </div></div>
     </div>
-    </div>
-    
-</div>
-
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
