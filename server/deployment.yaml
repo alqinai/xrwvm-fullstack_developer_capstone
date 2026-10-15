@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dealership
+  labels:
+    run: dealership
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: dealership
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        run: dealership
+    spec:
+      containers:
+        - name: dealership
+          image: us.icr.io/REPLACE_WITH_SN_LABS_NAMESPACE/dealership:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          # Set backend_url to a URL reachable FROM the Kubernetes pod.
+          # localhost:3030 inside this pod will not reach Express on the lab host.
+          # env:
+          #   - name: backend_url
+          #     value: "https://YOUR-ACCESSIBLE-EXPRESS-URL"
+      restartPolicy: Always
